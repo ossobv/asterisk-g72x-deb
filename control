@@ -1,0 +1,35 @@
+Source: asterisk-g72x
+Priority: optional
+Section: comm
+Maintainer: Debian VoIP Team <pkg-voip-maintainers@lists.alioth.debian.org>
+Uploaders: Walter Doekes <wjdoekes+asterisk@osso.nl>
+Build-Depends:
+ debhelper (>= 9),
+ autotools-dev,
+ dh-autoreconf,
+ pkg-config,
+ asterisk-dev (>= 1:11),
+ asterisk-dev (<< 1:12),
+ libbcg729-dev
+Standards-Version: 3.9.6
+Homepage: http://asterisk.hosting.lv/
+Vcs-Browser: https://bitbucket.org/arkadi/asterisk-g72x/src
+Vcs-Hg: https://bitbucket.org/arkadi/asterisk-g72x
+
+Package: asterisk-g72x-g729-ast11
+Architecture: any
+Multi-Arch: same
+Pre-Depends: ${misc:Pre-Depends}
+Depends:
+ ${shlibs:Depends},
+ ${misc:Depends}
+Recommends: asterisk (>= 1:11), asterisk (<< 1:12), asterisk-modules
+Description: G.729 codec support for the Asterisk PBX
+ G.729 is a royalty-free narrow-band vocoder-based audio data
+ compression algorithm using a frame length of 10 milliseconds.
+ .
+ This package includes the G.729 codec driver (codec_g729.so) for
+ Asterisk PBX.
+ .
+ For more information about the Asterisk PBX, have a look at the Asterisk
+ package.
