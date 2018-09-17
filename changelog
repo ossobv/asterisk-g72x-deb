@@ -1,8 +1,15 @@
+asterisk-g72x (1.3+20+3058c45eb60d-0osso2+d9) stretch; urgency=medium
+
+  * Docker build for stretch.
+  * Build for both Asterisk 11 and 13 at once.
+
+ -- Walter Doekes <wjdoekes+asterisk@osso.nl>  Mon, 17 Sep 2018 20:57:58 +0200
+
 asterisk-g72x (1.3+20+3058c45eb60d-0osso1+deb9) stretch; urgency=medium
 
   * New build for stretch.
 
- -- Walter Doekes <wjdoekes+asterisk@osso.nl>  Tue, 10 Apr 2017 11:56:38 +0200
+ -- Walter Doekes <wjdoekes+asterisk@osso.nl>  Tue, 10 Apr 2018 11:56:38 +0200
 
 asterisk-g72x (1.3+20-0osso1~deb8) jessie; urgency=medium
 

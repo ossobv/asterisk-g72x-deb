@@ -1,6 +1,21 @@
 OSSO build of the asterisk-g72x G.729 codec
 ===========================================
 
+Using Docker::
+
+    ./Docker.build
+
+If the build succeeds, the built Debian packages are placed inside (a
+subdirectory of) ``Docker.out/``.
+
+At the moment, the Docker build builds packages for both Asterisk 11 and
+Asterisk 13.
+
+
+------------
+Manual build
+------------
+
 Get source::
 
     hg clone http://asterisk.hosting.lv/hg asterisk-g72x
@@ -48,5 +63,3 @@ TODO
     dpkg-shlibdeps: warning: ast_unregister_translator: it's probably a plugin
 
 * Should add ``-dbg`` package?
-
-* Should build against multiple Asterisk versions?
