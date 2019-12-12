@@ -8,23 +8,23 @@ Build-Depends:
  autotools-dev,
  dh-autoreconf,
  pkg-config,
-#asterisk-dev (>= 1:11),
-#asterisk-dev (<< 1:12),
  libbcg729-dev
 Standards-Version: 3.9.6
 Homepage: http://asterisk.hosting.lv/
 Vcs-Browser: https://bitbucket.org/arkadi/asterisk-g72x/src
 Vcs-Hg: https://bitbucket.org/arkadi/asterisk-g72x
 
-Package: asterisk-g72x-g729-ast11
+Package: asterisk-g72x-g729-ast16
 Architecture: any
 Multi-Arch: same
 Pre-Depends: ${misc:Pre-Depends}
 Depends:
  ${shlibs:Depends},
  ${misc:Depends}
-Conflicts: asterisk-g72x-g729-ast13
-Recommends: asterisk (>= 1:11), asterisk (<< 1:12), asterisk-modules
+Conflicts:
+ asterisk-g72x-g729-ast11,
+ asterisk-g72x-g729-ast13
+Recommends: asterisk (>= 1:16), asterisk (<< 1:17), asterisk-modules
 Description: G.729 codec support for the Asterisk PBX
  G.729 is a royalty-free narrow-band vocoder-based audio data
  compression algorithm using a frame length of 10 milliseconds.
@@ -42,8 +42,31 @@ Pre-Depends: ${misc:Pre-Depends}
 Depends:
  ${shlibs:Depends},
  ${misc:Depends}
-Conflicts: asterisk-g72x-g729-ast11
+Conflicts:
+ asterisk-g72x-g729-ast11,
+ asterisk-g72x-g729-ast16
 Recommends: asterisk (>= 1:13), asterisk (<< 1:14), asterisk-modules
+Description: G.729 codec support for the Asterisk PBX
+ G.729 is a royalty-free narrow-band vocoder-based audio data
+ compression algorithm using a frame length of 10 milliseconds.
+ .
+ This package includes the G.729 codec driver (codec_g729.so) for
+ Asterisk PBX.
+ .
+ For more information about the Asterisk PBX, have a look at the Asterisk
+ package.
+
+Package: asterisk-g72x-g729-ast11
+Architecture: any
+Multi-Arch: same
+Pre-Depends: ${misc:Pre-Depends}
+Depends:
+ ${shlibs:Depends},
+ ${misc:Depends}
+Conflicts:
+ asterisk-g72x-g729-ast16,
+ asterisk-g72x-g729-ast13
+Recommends: asterisk (>= 1:11), asterisk (<< 1:12), asterisk-modules
 Description: G.729 codec support for the Asterisk PBX
  G.729 is a royalty-free narrow-band vocoder-based audio data
  compression algorithm using a frame length of 10 milliseconds.

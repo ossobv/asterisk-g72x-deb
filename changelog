@@ -1,3 +1,12 @@
+asterisk-g72x (1.4.3-0osso1+deb9) stretch; urgency=medium
+
+  * Update to upstream 1.4.3 (which has a source package now).
+  * Improve docker build, allowing builds for multiple OS'es; using:
+    ./Dockerfile.buildmany
+  * Use +deb9 instead of +d9.
+
+ -- Walter Doekes <wjdoekes+asterisk-g72x@osso.nl>  Thu, 12 Dec 2019 17:00:48 +0100
+
 asterisk-g72x (1.3+20+3058c45eb60d-0osso2+d9) stretch; urgency=medium
 
   * Docker build for stretch.

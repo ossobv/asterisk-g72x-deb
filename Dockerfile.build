@@ -1,0 +1,65 @@
+#!/bin/bash
+cd "$(dirname "$0")"  # jump to curdir
+
+# Pass these on the command line.
+oscodename=${1:-debian/stretch}  # debian/stretch
+
+buildversion=$(sed -e '1!d;s/.*(//;s/).*//' changelog)
+upname=asterisk-g72x
+upversion=$(echo "$buildversion" | sed -e 's/-.*//;s/^[0-9]*://')
+debepoch=$(echo "$buildversion" | sed -e '/^[0-9]*:/!d;s/:.*/:/')
+debversion=$(echo "$buildversion" | sed -e 's/[^-]*-//;s/+[^+]*$//')
+dockversion=$(echo "build-$upname-$buildversion" |
+              sed -e 's/^[0-9]*://;s/[^A-Za-z0-9.-]/_/g')
+
+echo "Usage: $0 [$oscodename]"
+echo ".. continuing"
+
+osdistro=${oscodename%/*}   # debian (or ubuntu)
+oscodename=${oscodename#*/} # stretch (or bionic)
+osdistshort=${osdistro:0:3} # deb (or ubu)
+case $osdistro/$oscodename in
+debian/buster)  oscodenum=10;;
+debian/stretch) oscodenum=9;;
+debian/jessie)  oscodenum=8;;
+debian/wheezy)  oscodenum=7;;
+ubuntu/bionic)  oscodenum=18.04;;
+ubuntu/xenial)  oscodenum=16.04;;
+ubuntu/trusty)  oscodenum=14.04;;
+*) echo "ERROR: undefined OS: $osdistro/$oscodename" >&2 && exit 1
+esac
+_shortver=$osdistshort$oscodenum
+
+# Update changelog
+sed -i -e "1s/+\\(deb\\|ubu\\)[0-9.]*) [a-z]\\+;/+$_shortver) $oscodename;/" \
+    changelog
+
+# Docker disallows certain tokens in versions.
+dockversion=$(echo build-${upname}-${upversion}-${debversion}-${oscodename} |
+    sed -e 's/[^0-9A-Za-z_.-]/_/g')
+
+# Will build files.
+if ! docker build \
+    --pull \
+    --ulimit nofile=512 \
+    --build-arg osdistro=$osdistro \
+    --build-arg osdistshort=$osdistshort \
+    --build-arg oscodename=$oscodename \
+    --build-arg upname=$upname \
+    --build-arg upversion=$upversion \
+    --build-arg debepoch=$debepoch \
+    --build-arg debversion=$debversion \
+    -t $dockversion \
+    -f Dockerfile \
+    .
+then
+    ret=$?
+    echo "fail" >&2
+    exit $ret
+fi
+
+# Copy files to ./Dockerfile.out
+test -d Dockerfile.out/$oscodename || mkdir -p Dockerfile.out/$oscodename
+docker run $dockversion sh -c 'cd /dist; tar -zc *' |
+    tar -zxvC Dockerfile.out/$oscodename/ |
+    sed -e 's#$# -> Dockerfile.out/'$oscodename'/#'

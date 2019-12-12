@@ -4,6 +4,10 @@
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
 
+# Our (debian) Asterisk installs are in /usr/lib, not in
+# /usr/lib/x86_64-linux-gnu.
+AST_LIBDIR = /usr/lib
+
 # Uncomment this to change the hardening options
 export DEB_BUILD_MAINT_OPTIONS = hardening=+all
 
@@ -23,33 +27,34 @@ override_dh_auto_configure:
 	true
 
 override_dh_auto_build:
-	# Build for 11.
+	# Build for 16.
 	rm -f config.log
 	dh_auto_clean
-	dh_auto_configure -- --with-asterisk100 --with-bcg729 \
-	  --with-asterisk-includes=../asterisk-11/include \
-	  --libdir=/usr/lib  # without /ARCH because ast11 doesn't have that
+	dh_auto_configure -- --with-asterisk160 --with-bcg729 \
+	  --with-asterisk-includes=../asterisk-16/include \
+	  --libdir=$(AST_LIBDIR)
 	dh_auto_build "$@"
-	mv .libs/codec_g729.so /tmp/codec_g729-ast11.so
+	mkdir /tmp/modules-16 && mv .libs/codec_g729.so /tmp/modules-16/
 	# Build for 13.
 	rm -f config.log
 	dh_auto_clean
 	dh_auto_configure -- --with-asterisk130 --with-bcg729 \
 	  --with-asterisk-includes=../asterisk-13/include \
-	  --libdir=/usr/lib  # without /ARCH because ast11 doesn't have that
+	  --libdir=$(AST_LIBDIR)
 	dh_auto_build "$@"
-	mv .libs/codec_g729.so /tmp/codec_g729-ast13.so
+	mkdir /tmp/modules-13 && mv .libs/codec_g729.so /tmp/modules-13/
+	# Build for 11.
+	rm -f config.log
+	dh_auto_clean
+	dh_auto_configure -- --with-asterisk100 --with-bcg729 \
+	  --with-asterisk-includes=../asterisk-11/include \
+	  --libdir=$(AST_LIBDIR)
+	dh_auto_build "$@"
+	mkdir /tmp/modules-11 && mv .libs/codec_g729.so /tmp/modules-11/
 
 override_dh_auto_install:
-	/usr/bin/install -Dt $(CURDIR)/debian/tmp/usr/lib/asterisk/modules/ \
-	   /tmp/codec_g729-ast11.so /tmp/codec_g729-ast13.so
-
-override_dh_install:
-	dh_install
-	for version in 11 13; do \
-	    mv $(CURDIR)/debian/asterisk-g72x-g729-ast$$version/usr/lib/asterisk/modules/codec_g729-ast$$version.so \
-	      $(CURDIR)/debian/asterisk-g72x-g729-ast$$version/usr/lib/asterisk/modules/codec_g729.so; \
-	done
+	install -d $(CURDIR)/debian/tmp/tmp
+	mv /tmp/modules-* $(CURDIR)/debian/tmp/tmp/
 
 override_dh_shlibdeps:
 	dh_shlibdeps -- -v

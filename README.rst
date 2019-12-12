@@ -3,10 +3,10 @@ OSSO build of the asterisk-g72x G.729 codec
 
 Using Docker::
 
-    ./Docker.build
+    ./Dockerfile.build
 
 If the build succeeds, the built Debian packages are placed inside (a
-subdirectory of) ``Docker.out/``.
+subdirectory of) ``Dockerfile.out/``.
 
 At the moment, the Docker build builds packages for both Asterisk 11 and
 Asterisk 13.
