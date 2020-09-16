@@ -25,7 +25,7 @@ Conflicts:
  asterisk-g72x-g729-ast16,
  asterisk-g72x-g729-ast13,
  asterisk-g72x-g729-ast11
-Recommends: asterisk (>= 1:16), asterisk (<< 1:17), asterisk-modules
+Recommends: asterisk (>= 1:18), asterisk (<< 1:17), asterisk-modules
 Description: G.729 codec support for the Asterisk PBX
  G.729 is a royalty-free narrow-band vocoder-based audio data
  compression algorithm using a frame length of 10 milliseconds.

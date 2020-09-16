@@ -30,7 +30,7 @@ override_dh_auto_build:
 	# Build for 18.
 	rm -f config.log
 	dh_auto_clean
-	dh_auto_configure -- --with-asterisk160 --with-bcg729 \
+	dh_auto_configure -- --with-asterisk180 --with-bcg729 \
 	  --with-asterisk-includes=../asterisk-18/include \
 	  --libdir=$(AST_LIBDIR)
 	dh_auto_build "$@"
