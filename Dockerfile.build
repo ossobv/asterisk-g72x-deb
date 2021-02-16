@@ -39,7 +39,7 @@ dockversion=$(echo build-${upname}-${upversion}-${debversion}-${oscodename} |
     sed -e 's/[^0-9A-Za-z_.-]/_/g')
 
 # Will build files.
-if ! docker build \
+docker build \
     --pull \
     --ulimit nofile=512 \
     --build-arg osdistro=$osdistro \
@@ -52,9 +52,9 @@ if ! docker build \
     -t $dockversion \
     -f Dockerfile \
     .
-then
-    ret=$?
-    echo "fail" >&2
+ret=$?
+if test $ret -ne 0; then
+    echo "fail ($ret)" >&2
     exit $ret
 fi
 

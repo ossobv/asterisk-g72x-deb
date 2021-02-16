@@ -27,6 +27,14 @@ override_dh_auto_configure:
 	true
 
 override_dh_auto_build:
+	# Build for 18.
+	rm -f config.log
+	dh_auto_clean
+	dh_auto_configure -- --with-asterisk160 --with-bcg729 \
+	  --with-asterisk-includes=../asterisk-18/include \
+	  --libdir=$(AST_LIBDIR)
+	dh_auto_build "$@"
+	mkdir /tmp/modules-18 && mv .libs/codec_g729.so /tmp/modules-18/
 	# Build for 16.
 	rm -f config.log
 	dh_auto_clean

@@ -40,7 +40,7 @@ RUN apt-get install -y \
 
 # Set up upstream source, move debian dir and jump into dir.
 #
-# Trick to allow caching of asterisk*.tar.bz2/gz files. Download them
+# Trick to allow caching of ${upname}*.tar.bz2/gz files. Download them
 # once using the curl command below into .cache/* if you want. The COPY
 # is made conditional by the "[2]" "wildcard". (We need one existing
 # file (README.rst) so the COPY doesn't fail.)
@@ -79,12 +79,13 @@ RUN echo "deb http://ppa.osso.nl/${osdistro} ${oscodename} osso" >/etc/apt/sourc
 # RUN printf "%s\n" "Package: asterisk asterisk-*" "Pin: version 1:11.*" "Pin-Priority: 600" \
 #     >/etc/apt/preferences.d/asterisk.pref
 RUN set -x && \
-    cd .. && for version in 11 13 16; do \
+    cd .. && for version in 18 16 13 11; do \
     curl --fail -O https://junk.devs.nu/a/asterisk/asterisk-$version-include.tar.bz2 && \
     tar jxf asterisk-$version-include.tar.bz2; done && \
-    test $(md5sum asterisk-11-include.tar.bz2 | awk '{print $1}') = 2d0e18839d469f0929bc45738faa1b77 && \
-    test $(md5sum asterisk-13-include.tar.bz2 | awk '{print $1}') = cad97c28885add2c0b3fe7b7c713f2aa && \
+    test $(md5sum asterisk-18-include.tar.bz2 | awk '{print $1}') = bddb6ba2a27e80470cccacc67a725ffb && \
     test $(md5sum asterisk-16-include.tar.bz2 | awk '{print $1}') = f2135dd7204514f6899374618aa7873f && \
+    test $(md5sum asterisk-13-include.tar.bz2 | awk '{print $1}') = cad97c28885add2c0b3fe7b7c713f2aa && \
+    test $(md5sum asterisk-11-include.tar.bz2 | awk '{print $1}') = 2d0e18839d469f0929bc45738faa1b77 && \
     set +x
 
 # Apt-get prerequisites according to control file.
@@ -107,12 +108,18 @@ RUN rm -rf debian/.cache
 # Build!
 RUN DEB_BUILD_OPTIONS=parallel=1 dpkg-buildpackage -us -uc -sa
 
-# TODO: for bonus points, we could run quick tests here;
-# for starters dpkg -i tests?
-
-# Write output files (store build args in ENV first).
+# Get build args so we can make a version string.
 ENV oscodename=$oscodename osdistshort=$osdistshort \
     upname=$upname upversion=$upversion debversion=$debversion
+
+# Do a quick test that all subpackages got their own codec_g729.so file.
+RUN . /etc/os-release && fullversion=${upversion}-${debversion}+${osdistshort}${VERSION_ID} && \
+    packages=$(sed -e '/^Package:/!d;s/^[^:]*: //' debian/control) && \
+    for pkg in $packages; do deb=../${pkg}_${fullversion}_amd64.deb; \
+      echo "Checking .so in $deb" >&2; dpkg-deb -c "$deb" | \
+      grep -F './usr/lib/asterisk/modules/codec_g729.so'; done
+
+# Write output files.
 RUN . /etc/os-release && fullversion=${upversion}-${debversion}+${osdistshort}${VERSION_ID} && \
     mkdir -p /dist/${upname}_${fullversion} && \
     mv /build/*${fullversion}* /dist/${upname}_${fullversion}/ && \
