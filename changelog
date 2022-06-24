@@ -1,4 +1,10 @@
-asterisk-g72x (1.4.3-0osso2+deb10) buster; urgency=medium
+asterisk-g72x (1.4.3-0osso3+REL) stable; urgency=medium
+
+  * Fix build for bullseye.
+
+ -- Walter Doekes <wjdoekes+asterisk-g72x@osso.nl>  Fri, 24 Jun 2022 16:42:53 +0200
+
+asterisk-g72x (1.4.3-0osso2+deb9) stretch; urgency=medium
 
   * New build, this time with asterisk-18 packages as well.
 
