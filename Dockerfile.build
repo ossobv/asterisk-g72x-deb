@@ -9,8 +9,6 @@ upname=asterisk-g72x
 upversion=$(echo "$buildversion" | sed -e 's/-.*//;s/^[0-9]*://')
 debepoch=$(echo "$buildversion" | sed -e '/^[0-9]*:/!d;s/:.*/:/')
 debversion=$(echo "$buildversion" | sed -e 's/[^-]*-//;s/+[^+]*$//')
-dockversion=$(echo "build-$upname-$buildversion" |
-              sed -e 's/^[0-9]*://;s/[^A-Za-z0-9.-]/_/g')
 
 echo "Usage: $0 [$oscodename]"
 echo ".. continuing"

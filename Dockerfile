@@ -12,12 +12,18 @@ ARG DEBIAN_FRONTEND=noninteractive
 # cache. We do this before copying anything and before getting lots of
 # ARGs from the user. That keeps this bit cached.
 RUN echo 'APT::Install-Recommends "0";' >/etc/apt/apt.conf.d/01norecommends
-# We'll be ignoring "debconf: delaying package configuration, since apt-utils is not installed"
+# We'll be ignoring "debconf: delaying package configuration, since apt-utils
+#   is not installed"
 RUN apt-get update -q && \
     apt-get dist-upgrade -y && \
     apt-get install -y \
         ca-certificates curl \
-        build-essential devscripts dh-autoreconf dpkg-dev equivs quilt
+        build-essential devscripts dh-autoreconf dpkg-dev equivs quilt && \
+    printf "%s\n" \
+        QUILT_PATCHES=debian/patches QUILT_NO_DIFF_INDEX=1 \
+        QUILT_NO_DIFF_TIMESTAMPS=1 'QUILT_DIFF_OPTS="--show-c-function"' \
+        'QUILT_REFRESH_ARGS="-p ab --no-timestamps --no-index"' \
+        >~/.quiltrc
 
 # Apt-get prerequisites according to control file.
 COPY control /build/debian/control
@@ -38,7 +44,7 @@ RUN . /etc/os-release && \
 
 # Trick to allow caching of UPNAME*.tar.gz files. Download them
 # once using the curl command below into .cache/* if you want. The COPY
-# is made conditional by the "[2]" "wildcard". (We need one existing
+# is made conditional by the "[bg]" "wildcard". (We need one existing
 # file (README.rst) so the COPY doesn't fail.)
 COPY ./README.rst .cache/${upname}_${upversion}.orig.tar.[bg]* /build/
 # RUN if ! test -s /build/${upname}_${upversion}.orig.tar.gz; then \
@@ -66,7 +72,7 @@ RUN cd /build && tar jxf "${upname}_${upversion}.orig.tar.bz2" && \
 COPY asterisk-g72x-g729-ast11.install asterisk-g72x-g729-ast13.install \
     asterisk-g72x-g729-ast16.install asterisk-g72x-g729-ast18.install \
     compat rules source /build/${upname}-${upversion}/debian/
-WORKDIR "/build/${upname}-${upversion}"
+WORKDIR /build/${upname}-${upversion}
 
 # We'll use include-tars so we can build for multiple asterisk versions.
 # RUN printf "%s\n" "Package: asterisk asterisk-*" "Pin: version 1:11.*" "Pin-Priority: 600" \
@@ -98,6 +104,6 @@ RUN . /etc/os-release && fullversion=${upversion}-${debversion}+${osdistshort}${
 # Write output files.
 RUN . /etc/os-release && fullversion=${upversion}-${debversion}+${osdistshort}${VERSION_ID} && \
     mkdir -p /dist/${upname}_${fullversion} && \
-    mv /build/*${fullversion}* /dist/${upname}_${fullversion}/ && \
     mv /build/${upname}_${upversion}.orig.tar.bz2 /dist/${upname}_${fullversion}/ && \
+    mv /build/*${fullversion}* /dist/${upname}_${fullversion}/ && \
     cd / && find dist/${upname}_${fullversion} -type f >&2
