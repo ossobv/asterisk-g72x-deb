@@ -1,5 +1,11 @@
 asterisk-g72x (1.4.3-0osso3+REL) stable; urgency=medium
 
+  * Include asterisk 22
+
+ -- Dennis Kraus <kraus@posteo.de>  Fri, 23 Dec 2024 10:59:27 +0200
+
+asterisk-g72x (1.4.3-0osso3+REL) stable; urgency=medium
+
   * Fix build for bullseye.
 
  -- Walter Doekes <wjdoekes+asterisk-g72x@osso.nl>  Fri, 24 Jun 2022 16:42:53 +0200

@@ -71,12 +71,14 @@ RUN cd /build && tar jxf "${upname}_${upversion}.orig.tar.bz2" && \
     mv debian "${upname}-${upversion}/"
 COPY asterisk-g72x-g729-ast11.install asterisk-g72x-g729-ast13.install \
     asterisk-g72x-g729-ast16.install asterisk-g72x-g729-ast18.install \
+    asterisk-g72x-g729-ast22.install \
     compat rules source /build/${upname}-${upversion}/debian/
 WORKDIR /build/${upname}-${upversion}
 
 # We'll use include-tars so we can build for multiple asterisk versions.
 # RUN printf "%s\n" "Package: asterisk asterisk-*" "Pin: version 1:11.*" "Pin-Priority: 600" \
 #     >/etc/apt/preferences.d/asterisk.pref
+# TODO:   22 no available at the URL below
 RUN set -x && \
     cd .. && for version in 18 16 13 11; do \
     curl --fail -O https://junk.devs.nu/a/asterisk/asterisk-$version-include.tar.bz2 && \
