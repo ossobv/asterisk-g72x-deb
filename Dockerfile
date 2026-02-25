@@ -66,7 +66,7 @@ COPY ./README.rst .cache/${upname}_${upversion}.orig.tar.[bg]* /build/
 RUN (test -f /build/${upname}_${upversion}.orig.tar.bz2 || \
      curl -o /build/${upname}_${upversion}.orig.tar.bz2 \
        http://asterisk.hosting.lv/src/${upname}-${upversion}.tar.bz2) && \
-    test $(md5sum /build/${upname}_${upversion}.orig.tar.bz2 | awk '{print $1}') = f8d8c0f212f58547e4115327cc0d2dca
+    test $(md5sum /build/${upname}_${upversion}.orig.tar.bz2 | awk '{print $1}') = b00570066363c88f9306e2682755edbc
 RUN cd /build && tar jxf "${upname}_${upversion}.orig.tar.bz2" && \
     mv debian "${upname}-${upversion}/"
 COPY asterisk-g72x-g729-ast11.install asterisk-g72x-g729-ast13.install \

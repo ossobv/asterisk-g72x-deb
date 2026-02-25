@@ -1,3 +1,9 @@
+asterisk-g72x (1.4.5-0osso1+REL) stable; urgency=medium
+
+  * Update to 1.4.5 upstream.
+
+ -- Walter Doekes <wjdoekes+asterisk-g72x@osso.nl>  Wed, 25 Feb 2026 10:24:36 +0100
+
 asterisk-g72x (1.4.4-0osso4+REL) stable; urgency=medium
 
   * Update to 1.4.4 upstream.
