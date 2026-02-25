@@ -1,3 +1,13 @@
+asterisk-g72x (1.4.4-0osso4+REL) stable; urgency=medium
+
+  * Update to 1.4.4 upstream.
+  * Add asterisk-22 includes for Asterisk 22.x builds.
+  * Document how to add includes for newer asterisken.
+  * Patches by Jasper Hafkenscheid and Dennis Kraus.
+  * Bump version to 0osso3+1 past Jasper build.
+
+ -- Walter Doekes <wjdoekes+asterisk-g72x@osso.nl>  Wed, 25 Feb 2026 09:52:06 +0100
+
 asterisk-g72x (1.4.3-0osso3+REL) stable; urgency=medium
 
   * Fix build for bullseye.
